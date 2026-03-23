@@ -1,0 +1,36 @@
+---
+description: Show the current quota for project
+enabled: false
+entry_point: src/openstack_actions.py
+name: quota.show
+parameters:
+  lib_entry_point:
+    default: apis.openstack_api.openstack_quota.quota_show
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  default:
+    default: false
+    description: Show default quotas for <project>
+    type: boolean
+  format:
+    default: table
+    description: 'the output format, defaults to table (choices: json, shell,
+              table, value, yaml)'
+    type: string
+  project_identifier:
+    description: Project (Name or ID)
+    required: true
+    type: string
+runner_type: python-script

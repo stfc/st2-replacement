@@ -1,0 +1,79 @@
+---
+description: Create openstack project
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.create
+parameters:
+  lib_entry_point:
+    default: workflows.create_project.create_project
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  project_name:
+    required: true
+    type: string
+    description: Project Name to create
+  project_email:
+    description: Contact email of new project
+    required: true
+    type: string
+  project_description:
+    required: true
+    type: string
+    description: Project Description
+  project_immutable:
+    default: false
+    description: Project is immutable or not
+    type: boolean
+  parent_id:
+    default: ""
+    description: Set the ID of the parent project.
+    type: string
+  admin_user_list:
+    required: false
+    default: []
+    type: array
+    description: List of Users (IDs or Names) to give administrator access
+  user_list:
+    required: false
+    default: []
+    type: array
+    description: List of Users (IDs or Names) to give local user access
+  user_domain:
+    description: Project user domain
+    type: string
+    default: stfc
+    enum:
+      - stfc
+      - jasmin
+      - default
+  network:
+    description: Set cloud network, (internal, external, JASMIN)
+    type: string
+    default: Internal
+    enum:
+      - Internal
+      - External
+      - Jasmin
+  number_of_floating_ips:
+    required: true
+    type: integer
+    default: 1
+    description: Number of Floating IPs to allocate to the project - and is also the quota
+  number_of_security_group_rules:
+    required: true
+    type: integer
+    default: 200
+    description: Quota for number of Security Group Rules - needs to be at least 3
+runner_type: python-script

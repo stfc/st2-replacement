@@ -1,0 +1,143 @@
+---
+description: Search for images with a selected expression
+enabled: true
+entry_point: src/openstack_actions.py
+name: image.search.by.expression
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.search_by_expression.search_by_expression
+    immutable: true
+    type: string
+  query_type:
+    default: ImageQuery
+    immutable: true
+    type: string
+  as_admin:
+    default: True
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  output_type:
+    default: "to_string"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  property_to_search_by:
+    default: "image_creation_progress"
+    description: "choose property to search by (acts as OR for each)"
+    enum:
+      - "image_creation_progress"
+      - "image_minimum_ram"
+      - "image_minimum_disk"
+      - "image_size"
+    type: string
+    required: true
+  search_mode:
+    description: "what to mode to use to search by"
+    default: "LESS_THAN"
+    type: string
+    required: true
+    enum:
+      - "LESS_THAN"
+      - "LESS_THAN_OR_EQUAL_TO"
+      - "GREATER_THAN"
+      - "GREATER_THAN_OR_EQUAL_TO"
+  value:
+    description: "A number to compare the property against"
+    required: true
+    type: integer
+  properties_to_select:
+    default:
+      - "image_creation_date"
+      - "image_creation_progress"
+      - "image_id"
+      - "image_last_updated_date"
+      - "image_minimum_ram"
+      - "image_minimum_disk"
+      - "image_name"
+      - "image_size"
+      - "image_status"
+    type: array
+    description: "
+    A comma-spaced list of image properties to display for the resulting images - leave empty for all properties. One of:
+      - 'image_creation_date'
+      - 'image_creation_progress'
+      - 'image_id'
+      - 'image_last_updated_date'
+      - 'image_minimum_ram'
+      - 'image_minimum_disk'
+      - 'image_name'
+      - 'image_size'
+      - 'image_status'
+    Anything else will raise an error"
+    required: false
+  from_projects:
+    description: "(Optional) comma-spaced list of projects id/names to limit query to, if not provided, runs against all projects when all_projects is true"
+    type: array
+    default: null
+    required: false
+  all_projects:
+    type: boolean
+    description: "tick to search in all projects - default True"
+    required: true
+    default: true
+  group_by:
+    description: "(Optional) image property to group unique results by"
+    type: string
+    required: false
+    default: null
+    enum:
+      - null
+      - "image_creation_date"
+      - "image_creation_progress"
+      - "image_last_updated_date"
+      - "image_minimum_ram"
+      - "image_minimum_disk"
+      - "image_size"
+      - "image_status"
+  sort_by:
+    description: "(Optional) comma-spaced list of image properties to sort by (by ascending only)
+    - multiple of the same property will be ignored.
+    Any of:
+      - 'image_creation_date'
+      - 'image_creation_progress'
+      - 'image_id'
+      - 'image_last_updated_date'
+      - 'image_minimum_ram'
+      - 'image_minimum_disk'
+      - 'image_name'
+      - 'image_size'
+      - 'image_status'
+    Anything else will raise an error"
+    type: array
+    required: false
+    default: null
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

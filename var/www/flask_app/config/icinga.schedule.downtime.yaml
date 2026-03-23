@@ -1,0 +1,49 @@
+---
+description: Schedule a downtime for Host or Service in Icinga
+enabled: true
+entry_point: src/openstack_actions.py
+name: icinga.schedule.downtime
+parameters:
+  name:
+    type: string
+    description: Name of host or service in Icinga
+    required: true
+  start_time:
+    type: string
+    description: "Start Date and time (UK Time) in the format: %d/%m/%y %H:%M:%S"
+    required: true
+  end_time:
+    type: string
+    description: "End Date and time (UK Time) in the format: %d/%m/%y %H:%M:%S"
+    required: true
+  duration:
+    type: integer
+    description: Duration of flexible downtime in seconds, not needed for fixed downtime
+    required: false
+  comment:
+    type: string
+    description: Downtime reason
+    required: true
+  is_fixed:
+    type: boolean
+    description: If true, the downtime is fixed otherwise flexible
+    default: true
+  object_type:
+    immutable: false
+    type: string
+    description: Icinga Object Type
+    default: Host
+    required: true
+    enum:
+      - Host
+      - Service
+  lib_entry_point:
+    type: string
+    default: workflows.icinga_downtime.schedule_downtime
+    immutable: true
+  icinga_account_name:
+    type: string
+    description: "Name of Icinga Account to use. Must be configured in in the pack settings."
+    required: true
+    default: "default"
+runner_type: python-script

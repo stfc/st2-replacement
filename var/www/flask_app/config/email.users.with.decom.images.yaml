@@ -1,0 +1,86 @@
+---
+description: Sends an email to inform users that they have VMs running images that are to be decommissioned
+enabled: true
+entry_point: src/openstack_actions.py
+name: email.users.with.decom.images
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.send_decom_image_email.send_decom_image_email
+    immutable: true
+    type: string
+  subject:
+    type: string
+    description: "Subject to add to each email"
+    required: true
+    default: "STFC Cloud Operating System Decommissioning Notice"
+  smtp_account_name:
+    type: string
+    description: "Name of SMTP Account to use - must be configured in the pack config"
+    required: true
+    default: "default"
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  image_name_list:
+    type: array
+    description: "Comma-spaced list of Openstack Images names to decommission"
+    required: True
+  image_eol_list:
+    type: array
+    description: "Comma-spaced list of End of Life (YY/MM/DD) for each Image in image-name-list"
+    required: True
+  image_upgrade_list:
+    type: array
+    description:
+      "Comma-spaced list of images to upgrade to for each Image in image-name-list.
+      Use empty string '' to specify no upgraded image available"
+    required: True
+  limit_by_projects:
+    type: array
+    description: "Comma-spaced project to limit action to - incompatible with all_projects"
+    required: false
+    default: null
+  all_projects:
+    type: boolean
+    description: "Tick to search in all projects - default True"
+    required: true
+    default: true
+  use_override:
+    type: boolean
+    description: "Set this flag so ALL emails will be redirected to override email"
+    required: true
+    default: False
+  as_html:
+    type: boolean
+    description: "Send email body as HTML"
+    required: true
+    default: true
+  send_email:
+    type: boolean
+    description: "Set this flag to actually send emails instead of printing what will be sent"
+    required: true
+    default: false
+  override_email_address:
+    type: string
+    description: "Set an email address to override where to send the emails generated"
+    required: true
+    default: "cloud-support@stfc.ac.uk"
+  cc_cloud_support:
+    type: boolean
+    description: "Flag if set, will cc in cloud-support@stfc.ac.uk automatically"
+    required: false
+    default: false
+  email_from:
+    type: string
+    description: "Email address to send email from"
+    required: true
+    default: "cloud-support@stfc.ac.uk"
+    immutable: true
+runner_type: python-script

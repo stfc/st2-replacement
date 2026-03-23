@@ -1,0 +1,55 @@
+---
+description: Sends a test email
+enabled: true
+entry_point: src/openstack_actions.py
+name: email.test
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.send_test_email.send_test_email
+    immutable: true
+    type: string
+  email_to:
+    type: array
+    description: "Comma-spaced email addresses to send email to"
+    required: true
+  email_from:
+    type: string
+    description: "Email address to send email from"
+    required: true
+    default: "cloud-support@stfc.ac.uk"
+    immutable: true
+  email_cc:
+    description: "Email Addresses to Cc in (comma separated)"
+    required: false
+    type: array
+  username:
+    type: string
+    description: "name of person to add to email greeting"
+    required: true
+  test_message:
+    type: string
+    description: "Email message to put in the body"
+    required: false
+  subject:
+    type: string
+    description: "Email subject"
+    required: true
+    default: "Test Message"
+  smtp_account_name:
+    type: string
+    description: "Name of SMTP Account to use - must be configured in the pack config"
+    required: true
+    default: "default"
+  as_html:
+    type: boolean
+    description: "Send email body as HTML"
+    required: true
+    default: true
+  cc_cloud_support:
+    type: boolean
+    description: "Flag if set, will cc in cloud-support@stfc.ac.uk automatically"
+    required: false
+    default: false
+runner_type: python-script

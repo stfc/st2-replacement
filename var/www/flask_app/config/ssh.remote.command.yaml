@@ -1,0 +1,29 @@
+---
+description: Execute command on a remote host
+enabled: true
+entry_point: src/openstack_actions.py
+name: ssh.remote.command
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.ssh_remote_command.ssh_remote_command
+    immutable: true
+    type: string
+  host:
+    description: Host to run action on
+    required: true
+    type: string
+  username:
+    description: Username to authenticate as
+    required: true
+    type: string
+  private_key_path:
+    description: Private key to authenticate with
+    required: true
+    type: string
+  command:
+    description: Command to run
+    required: true
+    type: string
+runner_type: python-script

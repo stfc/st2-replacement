@@ -1,0 +1,43 @@
+---
+description: Removes a role from a user's project permissions
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.remove.user.role
+parameters:
+  lib_entry_point:
+    default: workflows.role_actions.role_remove
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  project_identifier:
+    description: Project name (Name or ID)
+    required: true
+    type: string
+  role_identifier:
+    description: Role to remove (Name or ID)
+    required: true
+    type: string
+  user_identifier:
+    description: User to remove from (Name or ID)
+    type: string
+    required: true
+  user_domain:
+    description: Authentication realm to search
+    type: string
+    required: true
+    default: stfc
+    enum:
+      - default
+      - stfc
+runner_type: python-script

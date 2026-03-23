@@ -1,0 +1,133 @@
+---
+description: Search for project with a selected property matching, or not matching given value(s)
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.search.by.property
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.search_by_property.search_by_property
+    immutable: true
+    type: string
+  query_type:
+    default: ProjectQuery
+    immutable: true
+    type: string
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  properties_to_select:
+    default:
+      - "description"
+      - "domain_id"
+      - "id"
+      - "is_domain"
+      - "is_enabled"
+      - "name"
+      - "parent_id"
+    type: array
+    description: "
+    A comma-spaced list of project properties to display for the resulting projects - leave empty for all properties. One of:
+      - 'description'
+      - 'domain_id'
+      - 'id'
+      - 'is_domain'
+      - 'is_enabled'
+      - 'name'
+      - 'parent_id'
+    Anything else will raise an error"
+    required: false
+  output_type:
+    default: "to_string"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  property_to_search_by:
+    default: "name"
+    description: "choose property to search by (acts as OR for each)"
+    enum:
+      - "description"
+      - "domain_id"
+      - "id"
+      - "is_domain"
+      - "is_enabled"
+      - "name"
+      - "parent_id"
+    type: string
+    required: true
+  search_mode:
+    description: "what to mode to use to search by"
+    default: "any_in"
+    type: string
+    required: true
+    enum:
+      - "any_in"
+      - "not_any_in"
+  values:
+    description: "a comma-spaced list of values to search for"
+    required: true
+    type: array
+  group_by:
+    description: "(Optional) server property to group unique results by
+    One of:
+      - 'description'
+      - 'domain_id'
+      - 'id'
+      - 'is_domain'
+      - 'is_enabled'
+      - 'name'
+      - 'parent_id'
+    Anything else will raise an error"
+    type: string
+    required: false
+    default: null
+    enum:
+      - "description"
+      - "domain_id"
+      - "id"
+      - "is_domain"
+      - "is_enabled"
+      - "name"
+      - "parent_id"
+      - null
+  sort_by:
+    description: "(Optional) comma-spaced list of project properties to sort by (by ascending only)
+    - multiple of the same property will be ignored.
+    Any of:
+      - 'description'
+      - 'domain_id'
+      - 'id'
+      - 'is_domain'
+      - 'is_enabled'
+      - 'name'
+      - 'parent_id'
+    Anything else will raise an error"
+    type: array
+    required: false
+    default: null
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

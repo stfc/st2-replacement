@@ -1,0 +1,23 @@
+---
+description: Migrates servers off of the given hypervisor(s)
+enabled: true
+entry_point: "workflows/hypervisor.drain.workflow.yaml"
+name: hypervisor.drain
+runner_type: orquesta
+parameters:
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  hypervisor_name:
+    description: Hostname of hypervisor to drain
+    required: true
+    type: string
+  disabled_reason:
+    description: Reason for draining the hypervisor
+    required: true
+    type: string

@@ -1,0 +1,37 @@
+---
+description: Post reboot action
+enabled: true
+entry_point: src/openstack_actions.py
+name: hv.post.reboot
+parameters:
+  hypervisor_hostname:
+    type: string
+    description: Hostname of hypervisor to run action against
+    required: true
+  lib_entry_point:
+    type: string
+    default: workflows.hv_post_reboot.post_reboot
+    immutable: true
+  icinga_account_name:
+    type: string
+    description: "Name of Icinga Account to use. Must be configured in in the pack settings."
+    required: true
+    default: "default"
+  alertmanager_account_name:
+    type: string
+    description: Name of Alertmanager Account to use. Must be configured in the pack settings.
+    required: true
+    default: "default"
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+runner_type: python-script

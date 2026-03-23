@@ -1,0 +1,37 @@
+---
+description: Migrate a server to a new host
+enabled: true
+entry_point: src/openstack_actions.py
+name: server.migrate
+parameters:
+  timeout:
+    default: 43200 # 12 Hours
+  lib_entry_point:
+    default: apis.openstack_api.openstack_server.snapshot_and_migrate_server
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  server_id:
+    type: string
+    required: true
+    description: ID of server to migrate
+  dest_host:
+    type: string
+    required: false
+    description: "Optional, host to migrate server to"
+  snapshot:
+    type: boolean
+    required: true
+    default: true
+runner_type: python-script

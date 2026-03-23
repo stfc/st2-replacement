@@ -1,0 +1,95 @@
+---
+description: Find good candidates for hypervisor reinstall
+enabled: true
+entry_point: src/openstack_actions.py
+name: hv.find.reinstall.candidates
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.find_reinstall_candidate_hypervisors.find_reinstall_candidate_hypervisors
+    immutable: true
+    type: string
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "prod"
+    enum:
+      - "dev"
+      - "prod"
+  output_type:
+    default: "to_csv"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  ip_regex:
+    default: '^172\.16\.(?:\d{1,3})\.(?:\d{1,3})$'
+    type: string
+    description: "Regex string to filter HV IPs by
+    Default only shows HVs with IP beginning 172.16.xxx.xxx."
+    required: true
+  max_vcpus:
+    default: 60
+    description: "Choose the maximum number of 'vCPUs Used' to consider."
+    type: integer
+    required: false
+  max_vms:
+    description: "Choose the maximum number of 'Running VMs' to consider."
+    type: integer
+    required: false
+  include_down:
+    description: "Choose whether to include HVs with state 'Down'"
+    type: boolean
+    required: true
+    default: false
+  include_disabled:
+    description: "Choose whether to include HVs with status 'Disabled'"
+    type: boolean
+    required: true
+    default: false
+  exclude_hostnames:
+    description: "Optionally exclude hostnames containing any of a comma-spaced list of substrings
+    I.e. for GPUs you could use:
+    'a100, a400, v100, rtx'
+    Or, simply, just '-' to include all hostnames with a hyphen
+    Leave empty to show all hosts"
+    type: array
+  include_flavours:
+    description: "Optional comma-spaced list of flavour names, only hypervisors that support at least one are included."
+    type: array
+  exclude_flavours: 
+    description: "Optional comma-spaced list of flavour names, hypervisors that can provision any are excluded."
+  sort_by:
+    description: "(Optional) hypervisor property to sort by"
+    type: string
+    enum:
+      - "vcpus_used"
+      - "memory_used"
+      - "running_vms"
+      - ""
+    required: false
+    default: "vcpus_used"
+  sort_direction:
+    description: "Direction to sort by"
+    enum:
+      - "asc"
+      - "desc"
+    type: string
+    required: true
+    default: "asc"
+runner_type: python-script

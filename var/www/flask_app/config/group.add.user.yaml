@@ -1,0 +1,42 @@
+---
+# This is slightly a misnomer, as it is actually adding a user to a group,
+# but it follows the same pattern as the other role actions
+description: Adds a user directly to an existing group
+enabled: true
+entry_point: src/openstack_actions.py
+name: group.add.user
+parameters:
+  lib_entry_point:
+    default: apis.openstack_api.openstack_roles.add_user_to_group
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  user_identifier:
+    description: User to add to (Name or ID)
+    type: string
+    required: true
+  domain_identifier:
+    description: Authentication domain to search, this much match between group and user
+    type: string
+    required: true
+    default: default
+    enum:
+      - default
+      - stfc
+      - jasmin
+  group_name:
+    description: Group to add the user to
+    type: string
+    required: true
+runner_type: python-script

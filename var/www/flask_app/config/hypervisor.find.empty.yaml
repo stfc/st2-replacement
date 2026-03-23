@@ -1,0 +1,25 @@
+---
+description: Common Queries about Hypervisors
+enabled: true
+entry_point: src/openstack_actions.py
+name: hypervisor.find.empty
+parameters:
+  lib_entry_point:
+    default: workflows.find_empty_hypervisors.find_empty_hypervisors
+    immutable: true
+    type: string
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  include_offline:
+    description: Include hypervisors marked offline from OpenStack in the results
+    required: true
+    type: boolean
+    default: false
+
+runner_type: python-script

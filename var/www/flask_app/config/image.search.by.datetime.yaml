@@ -1,0 +1,157 @@
+---
+description: Query images based on a datetime property (e.g. created-at or last-updated)
+enabled: true
+entry_point: src/openstack_actions.py
+name: image.search.by.datetime
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.search_by_datetime.search_by_datetime
+    immutable: true
+    type: string
+  query_type:
+    default: ImageQuery
+    immutable: true
+    type: string
+  as_admin:
+    default: True
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  properties_to_select:
+    default:
+      - "image_creation_date"
+      - "image_creation_progress"
+      - "image_id"
+      - "image_last_updated_date"
+      - "image_minimum_ram"
+      - "image_minimum_disk"
+      - "image_name"
+      - "image_size"
+      - "image_status"
+    type: array
+    description: "
+    A comma-spaced list of image properties to display for the resulting images - leave empty for all properties. One of:
+      - 'image_creation_date'
+      - 'image_creation_progress'
+      - 'image_id'
+      - 'image_last_updated_date'
+      - 'image_minimum_ram'
+      - 'image_minimum_disk'
+      - 'image_name'
+      - 'image_size'
+      - 'image_status'
+    Anything else will raise an error"
+    required: false
+  output_type:
+    default: "to_string"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  property_to_search_by:
+    description: "choose datetime property to base the query on"
+    default: "image_creation_date"
+    type: string
+    required: true
+    enum:
+      - "image_creation_date"
+      - "image_last_updated_date"
+  search_mode:
+    description: "what to mode to use to search by"
+    default: "older_than"
+    type: string
+    required: true
+    enum:
+      - "older_than"
+      - "older_than_or_equal_to"
+      - "younger_than"
+      - "younger_than_or_equal_to"
+  days:
+    description: "(Optional) Number of relative days from now"
+    type: integer
+    default: 0
+    required: false
+  hours:
+    description: "(Optional) Number of relative hours from now"
+    type: integer
+    default: 0
+    required: false
+  minutes:
+    description: "(Optional) Number of relative minutes from now"
+    type: integer
+    default: 0
+    required: false
+  seconds:
+    description: "(Optional) Number of relative seconds from now"
+    type: integer
+    default: 0
+    required: false
+  from_projects:
+    description: "(Optional) comma-spaced list of projects id/names to limit query to, if not provided, runs against all projects when all_projects is true"
+    type: array
+    default: null
+    required: false
+  all_projects:
+    type: boolean
+    description: "tick to search in all projects - default True"
+    required: true
+    default: true
+  group_by:
+    description: "(Optional) image property to group unique results by"
+    type: string
+    required: false
+    default: null
+    enum:
+      - null
+      - "image_creation_date"
+      - "image_creation_progress"
+      - "image_last_updated_date"
+      - "image_minimum_ram"
+      - "image_minimum_disk"
+      - "image_size"
+      - "image_status"
+  sort_by:
+    description: "(Optional) comma-spaced list of image properties to sort by (by ascending only)
+    - multiple of the same property will be ignored.
+    Any of:
+      - 'image_creation_date'
+      - 'image_creation_progress'
+      - 'image_id'
+      - 'image_last_updated_date'
+      - 'image_minimum_ram'
+      - 'image_minimum_disk'
+      - 'image_name'
+      - 'image_size'
+      - 'image_status'
+    Anything else will raise an error"
+    type: array
+    required: false
+    default: null
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

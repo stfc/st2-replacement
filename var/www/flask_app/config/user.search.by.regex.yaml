@@ -1,0 +1,114 @@
+---
+description: Search for users property using regex pattern, or not matching given value(s)
+enabled: true
+entry_point: src/openstack_actions.py
+name: user.search.by.regex
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.search_by_regex.search_by_regex
+    immutable: true
+    type: string
+  query_type:
+    default: UserQuery
+    immutable: true
+    type: string
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  properties_to_select:
+    default:
+      - "user_domain_id"
+      - "user_description"
+      - "user_name"
+      - "user_email"
+    type: array
+    description: "
+    A comma-spaced list of user properties to display for the resulting users - leave empty for all properties. One of:
+      - 'user_description'
+      - 'user_name'
+      - 'user_id'
+      - 'domain_id'
+    Anything else will raise an error"
+    required: false
+  output_type:
+    default: "to_string"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  property_to_search_by:
+    default: "user_name"
+    description: "choose property to search by"
+    enum:
+    - "user_description"
+    - "user_name"
+    type: string
+    required: true
+  pattern:
+    description: "the regex pattern to use - must be compatible with python regex 're' module"
+    required: true
+    type: string
+  from_domain:
+    description: "The user domain to search in. STFC - for STFC users. DEFAULT - for admins and service accounts. OPENID - for IRIS-IAM users"
+    default: "STFC"
+    type: string
+    required: true
+    enum:
+      - "STFC"
+      - "DEFAULT"
+      - "OPENID"
+  group_by:
+    description: "(Optional) server property to group unique results by
+    One of:
+      - 'user_description'
+      - 'user_name'
+      - 'user_id'
+      - 'domain_id'
+    Anything else will raise an error"
+    type: string
+    required: false
+    default: null
+    enum:
+      - null
+      - "user_domain_id"
+      - "user_description"
+      - "user_name"
+      - "user_email"
+  sort_by:
+    description: "(Optional) comma-spaced list of user properties to sort by (by ascending only)
+    - multiple of the same property will be ignored.
+    Any of:
+      - 'user_description'
+      - 'user_name'
+      - 'user_id'
+      - 'domain_id'
+    Anything else will raise an error"
+    type: array
+    required: false
+    default: null
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

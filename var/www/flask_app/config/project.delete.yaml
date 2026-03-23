@@ -1,0 +1,33 @@
+---
+description: Delete Openstack Project
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.delete
+parameters:
+  lib_entry_point:
+    default: workflows.project_actions.delete_project
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  project_identifier:
+    description: Project Name or Openstack ID to delete
+    type: string
+    default: ''
+    required: true
+  delete:
+    description: Check this to actually delete instead of just returning the project
+    type: boolean
+    default: false
+    required: true
+runner_type: python-script

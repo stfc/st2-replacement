@@ -1,0 +1,86 @@
+---
+description: Sends an email to inform users that they have VMs on a faulty hypervisor
+enabled: true
+entry_point: src/openstack_actions.py
+name: email.users.with.vms.on.hv.fault.notification
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.send_hv_email.send_hv_email
+    immutable: true
+    type: string
+  email_template:
+    default: hypervisor_fault_notification
+    immutable: true
+    type: string
+  subject:
+    type: string
+    description: "Subject to add to each email"
+    required: true
+    default: "STFC Cloud Hypervisor Fault"
+  smtp_account_name:
+    type: string
+    description: "Name of SMTP Account to use - must be configured in the pack config"
+    required: true
+    default: "default"
+  hypervisor_name:
+    type: string
+    description: "Name of hypervisor (xyz.nubes.rl.ac.uk)"
+    required: true
+    default: null
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  limit_by_projects:
+    type: array
+    description: "Comma-spaced project to limit action to - incompatible with all_projects"
+    required: false
+    default: null
+  all_projects:
+    type: boolean
+    description: "Tick to search in all projects - default True"
+    required: true
+    default: true
+  use_override:
+    type: boolean
+    description: "Set this flag so ALL emails will be redirected to override email"
+    required: true
+    default: False
+  as_html:
+    type: boolean
+    description: "Send email body as HTML"
+    required: true
+    default: true
+  send_email:
+    type: boolean
+    description: "Set this flag to actually send emails instead of printing what will be sent"
+    required: true
+    default: false
+  override_email_address:
+    type: string
+    description: "Set an email address to override where to send the emails generated"
+    required: true
+    default: "cloud-support@stfc.ac.uk"
+  cc_cloud_support:
+    type: boolean
+    description: "Flag if set, will cc in cloud-support@stfc.ac.uk automatically"
+    required: false
+    default: false
+  email_from:
+    type: string
+    description: "Email address to send email from"
+    required: true
+    default: "cloud-support@stfc.ac.uk"
+    immutable: true
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

@@ -1,0 +1,39 @@
+---
+description: Build a test server on a given hypervisor, can optionally test all possible flavors avaliable to the hypervisor
+enabled: true
+entry_point: src/openstack_actions.py
+name: hv.create.test.server
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.hv_create_test_server.create_test_server
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  hypervisor_names:
+    type: string
+    required: true
+    description: Name of the server or servers. If more than one is passed, split then by either comma (,) or colon (:) 
+  test_all_flavors:
+    type: boolean
+    description: Test all avaliable flavors for the hypervisor, otherwise test random flavor
+    default: false
+    required: true
+  delete_on_failure:
+    type: boolean
+    description: Delete servers that errored during creation
+    default: true
+    required: true
+runner_type: python-script

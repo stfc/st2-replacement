@@ -1,0 +1,31 @@
+---
+description: Add an existing flavor to a project
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.add.flavor
+parameters:
+  lib_entry_point:
+    default: apis.openstack_api.openstack_project.add_flavor_to_project
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  project_identifier:
+    description: Project Name or ID to add the flavor to
+    required: true
+    type: string
+  flavor_identifier:
+    description: Flavor Name or ID to add
+    required: true
+    type: string
+runner_type: python-script

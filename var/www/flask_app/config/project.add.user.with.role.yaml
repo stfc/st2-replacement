@@ -1,0 +1,44 @@
+---
+description: Add a User directly to a project with a given role
+enabled: true
+entry_point: src/openstack_actions.py
+name: project.add.user.with.role
+parameters:
+  lib_entry_point:
+    default: workflows.role_actions.role_add
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  project_identifier:
+    description: Project (Name or ID)
+    required: true
+    type: string
+  role_identifier:
+    description: Role to add (Name or ID)
+    required: true
+    type: string
+  user_identifier:
+    description: User to add to (Name or ID)
+    type: string
+    required: true
+  user_domain:
+    description: Authentication realm to search
+    type: string
+    required: true
+    default: stfc
+    enum:
+      - default
+      - stfc
+      - jasmin
+runner_type: python-script

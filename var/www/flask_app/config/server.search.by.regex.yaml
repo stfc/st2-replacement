@@ -1,0 +1,147 @@
+---
+description: Search for servers property using regex pattern, or not matching given value(s)
+enabled: true
+entry_point: src/openstack_actions.py
+name: server.search.by.regex
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.search_by_regex.search_by_regex
+    immutable: true
+    type: string
+  query_type:
+    default: ServerQuery
+    immutable: true
+    type: string
+  as_admin:
+    default: True
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  properties_to_select:
+    default:
+      - "flavor_id"
+      - "hypervisor_name"
+      - "image_id"
+      - "project_id"
+      - "server_creation_date"
+      - "server_description"
+      - "server_id"
+      - "server_last_updated_date"
+      - "server_name"
+      - "server_status"
+      - "user_id"
+    type: array
+    description: "
+    A comma-spaced list of server properties to display for the resulting servers - leave empty for all properties. One of:
+      - 'flavor_id'
+      - 'hypervisor_name'
+      - 'image_id'
+      - 'project_id'
+      - 'server_creation_date'
+      - 'server_description'
+      - 'server_id'
+      - 'server_last_updated_date'
+      - 'server_name'
+      - 'server_status'
+      - 'user_id'
+    Anything else will raise an error"
+    required: false
+  output_type:
+    default: "to_string"
+    type: string
+    enum:
+      - "to_html"
+      - "to_objects"
+      - "to_props"
+      - "to_string"
+      - "to_csv"
+      - "to_json"
+    description: "
+    A string representing how to return the results of the query
+      - 'to_html' - a tabulate table (in html)
+      - 'to_props' - properties dicts as a python list
+      - 'to_objects - as a list of openstack resources
+      - 'to_string' - a tabulate table
+      - 'to_csv' - a csv string
+      - 'to_json' - a json string"
+    required: true
+  property_to_search_by:
+    default: "server_name"
+    description: "choose property to search by"
+    enum:
+      - "flavor_id"
+      - "hypervisor_name"
+      - "image_id"
+      - "server_description"
+      - "server_id"
+      - "server_name"
+      - "server_status"
+      - "user_id"
+    type: string
+    required: true
+  pattern:
+    description: "the regex pattern to use - must be compatible with python regex 're' module"
+    required: true
+    type: string
+  from_projects:
+    description: "(Optional) comma-spaced list of projects id/names to limit query to, if not provided, runs against all projects"
+    type: array
+    default: null
+    required: false
+  all_projects:
+    type: boolean
+    description: "tick to search in all projects - default True"
+    required: true
+    default: true
+  group_by:
+    description: "(Optional) server property to group unique results by"
+    type: string
+    required: false
+    default: null
+    enum:
+      - null
+      - 'flavor_id'
+      - 'hypervisor_name'
+      - 'image_id'
+      - 'project_id'
+      - 'server_creation_date'
+      - 'server_description'
+      - 'server_id'
+      - 'server_last_updated_date'
+      - 'server_name'
+      - 'server_status'
+      - 'user_id'
+  sort_by:
+    description: "(Optional) comma-spaced list of server properties to sort by (by ascending only)
+    - multiple of the same property will be ignored.
+    Any of:
+      - 'flavor_id'
+      - 'hypervisor_name'
+      - 'image_id'
+      - 'project_id'
+      - 'server_creation_date'
+      - 'server_description'
+      - 'server_id'
+      - 'server_last_updated_date'
+      - 'server_name'
+      - 'server_status'
+      - 'user_id'
+    Anything else will raise an error"
+    type: array
+    required: false
+    default: null
+  webhook:
+    description: "Optional string representing a stackstorm webhook url path, can't be used alongside group_by"
+    default: null
+    type: string
+    required: false
+runner_type: python-script

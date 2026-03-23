@@ -1,0 +1,32 @@
+---
+description: Creates a new Project in OpenStack. This requires an associated JIRA ticket, for manual Project creation see project.create
+enabled: true
+entry_point: src/openstack_actions.py
+name: jira.request_new_project
+parameters:
+  lib_entry_point:
+    type: string
+    default: workflows.jira_openstack_request_new_project.request_new_project
+    immutable: true
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: The clouds.yaml account to use whilst performing this action
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  jira_account_name:
+    type: string
+    description: Name of JIRA Account to use. Must be configured in the pack settings.
+    required: true
+    default: "default"
+  issue_key:
+    type: string
+    description: The unique ID to identify each JIRA Issue
+    required: true
+runner_type: python-script

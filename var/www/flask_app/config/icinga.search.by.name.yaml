@@ -1,0 +1,50 @@
+---
+description: Search Icinga for Hosts/Services in a given state
+enabled: true
+entry_point: src/openstack_actions.py
+name: icinga.search.by.name
+parameters:
+  object_type:
+    immutable: false
+    type: string
+    description: Icinga Object Type
+    default: Host
+    required: true
+    enum:
+      - Host
+      - Service
+  name:
+    immutable: false
+    type: string
+    description: "name of iginga object, can be regex pattern"
+    default: null
+    required: true
+  properties_to_select:
+    immutable: false
+    type: array
+    description: "Comma Separated List of Host/Service properties to return e.g. name, state, address, for more see: https://icinga.com/docs/icinga-2/latest/doc/09-object-types/#host"
+    default:
+      - name
+      - state
+  joins:
+    required: false
+    type: array
+    description: "Comma Separated List of related Host/Service properties to return, such as returning information about the host when querying service objects e.g. host.name, host.state, host.address, for more properties see: https://icinga.com/docs/icinga-2/latest/doc/09-object-types/#host"
+  output_type:
+    immutable: false
+    type: string
+    description: return python dict or print table
+    default: table
+    enum:
+      - dict
+      - table
+  lib_entry_point:
+    type: string
+    default: workflows.icinga_search.search_by_name
+    immutable: true
+  icinga_account_name:
+    type: string
+    description: "Name of Icinga Account to use. Must be configured in in the pack settings."
+    required: true
+    default: "default"
+runner_type: python-script

@@ -1,0 +1,53 @@
+---
+description: Create a test jira task
+enabled: true
+entry_point: src/openstack_actions.py
+name: jira.create_test_issue
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: workflows.create_test_issue.create_test_issue
+    immutable: true
+    type: string
+  project_id:
+    type: string
+    description: "The ID or key of the JIRA project"
+    required: true
+  issue_type:
+    description: "
+    The type of issue, select from
+    - 'Task'
+    - 'Epic'
+    - 'Bug'"
+    required: true
+    type: string
+    default: "Task"
+    enum:
+      - "Task"
+      - "Epic"
+      - "Bug"
+  summary:
+    type: string
+    description: "An issue summary"
+    required: true
+  description:
+    type: string
+    description: "A description of the issue"
+    required: true
+  components:
+    type: array
+    description: "An array of dictionaries of the components to select, e.g [{'name': 'Dev Ops'}]"
+    required: true
+    default: [{"name": "Dev Ops"}]
+    immutable: true
+  epic_id:
+    type: string
+    description: "The epic ID "
+    required: true
+  jira_account_name:
+    type: string
+    description: "Name of jira Account to use. Must be configured in in the pack settings."
+    required: true
+    default: "default"
+runner_type: python-script

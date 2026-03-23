@@ -1,0 +1,49 @@
+---
+description: Create a new server
+enabled: true
+entry_point: src/openstack_actions.py
+name: server.create
+parameters:
+  timeout:
+    default: 5400
+  lib_entry_point:
+    default: apis.openstack_api.openstack_server.build_server
+    immutable: true
+    type: string
+  requires_openstack:
+    default: true
+    immutable: true
+    type: boolean
+  cloud_account:
+    description: "The clouds.yaml account to use whilst performing this action"
+    required: true
+    type: string
+    default: "dev"
+    enum:
+      - "dev"
+      - "prod"
+  server_name:
+    type: string
+    required: true
+    description: Name of server
+  flavor_name:
+    type: string
+    required: true
+    description: Server flavor
+  image_name:
+    type: string
+    required: true
+    description: Server Image
+  network_name:
+    type: string
+    required: true
+    description: Server Network
+    enum:
+      - Internal
+      - External
+  hypervisor_hostname:
+    type: string
+    required: false
+    default: null
+    description: Hypervisor to build server on
+runner_type: python-script
